@@ -50,7 +50,7 @@ const myBall3 = {
 const ENTITY_LIST = [
   myBall1,
   myBall2,
-  myBall3,
+  myBall3
 ]
 
 
@@ -69,6 +69,37 @@ const drawBall = (x, y, r, color) => {
   ctx.fillStyle = color
   ctx.fill()
 }
+
+// let mouseDown = false;
+// const downPos = {x: null, y: null};
+// const upPos = {x: null, y: null};
+
+
+// const pointInRect = ({x1, y1, x2, y2}, {x, y}) => (
+//   (x > x1 && x < x2) && (y > y1 && y < y2)
+// )
+
+// canvas.addEventListener("mousedown", (event) => {
+//   mouseDown = true;
+//   const {mouseX, mouseY} = getCursorPosition(canvas, event);
+//   downPos.x = mouseX;
+//   downPos.y = mouseY;
+// })
+
+// canvas.addEventListener("mouseup", (event) => {
+//   mouseDown = false;
+//   const {mouseX, mouseY} = getCursorPosition(canvas, event);
+//   upPos.x = mouseX;
+//   upPos.y = mouseY;
+
+//   // const xDis = getDistance(downPos.x, upPos.x);
+//   // const yDis = getDistance(downPos.y, upPos.y);
+
+//   const rectPos = {x1: downPos.x, y1: downPos.y, x2: upPos.x, y2: upPos.y};
+//   const isInside = pointInRect(rectPos, {x: myBall1.x, y: myBall1.y});
+  
+//   console.log(isInside);
+// })
 
 canvas.addEventListener("click", (event) => {
   console.log("Hit!")
@@ -193,8 +224,6 @@ const renderBalls = () => {
     drawBall(ball.x, ball.y, ball.r, ball.color);
   })
 }
-
-// drawBall(100, 100, 10, "red")
 
 setInterval(() => {
   ctx.clearRect(0, 0, canvas.clientWidth, canvas.clientHeight);
