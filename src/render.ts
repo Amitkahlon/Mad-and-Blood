@@ -32,7 +32,7 @@ export class Render {
     this.renderBalls();
   }
 
-  private drawBall = (x, y, r, color) => {
+  private drawEntity = (x, y, r, color) => {
     this.ctx.beginPath();
     this.ctx.arc(x, y, r, 0, 2 * Math.PI);
     this.ctx.strokeStyle = 'black';
@@ -42,8 +42,8 @@ export class Render {
   };
 
   private renderBalls = () => {
-    ENTITIES_LIST.forEach((ball) => {
-      this.drawBall(ball.pos.x, ball.pos.y, ball.r, ball.color);
+    ENTITIES_LIST.forEach((entity) => {
+      this.drawEntity(entity.pos.x, entity.pos.y, entity.r, entity.color);
     });
   };
 

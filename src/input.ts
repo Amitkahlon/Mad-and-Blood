@@ -1,5 +1,5 @@
 import { checkInsideCircle } from './calc';
-import { Entity, MovementMode } from './entity';
+import type { Entity } from './entity';
 import { getEntity, ENTITIES_LIST } from './game';
 
 enum MouseMode {
@@ -9,11 +9,21 @@ enum MouseMode {
 
 class MouseState {
   mouse_mode: number;
-  selectedBallId: number;
+  selectedEntityId: number;
 
   constructor() {
     this.mouse_mode = MouseMode.standby;
-    this.selectedBallId = -1;
+    this.selectedEntityId = -1;
+  }
+
+  public mouse_state_entity_selected(entityId: number) {
+    this.mouse_mode = MouseMode.selectedEntity;
+    this.selectedEntityId = entityId;
+  }
+
+  public mouse_state_entity_unselected() {
+    this.mouse_mode = MouseMode.standby;
+    this.selectedEntityId = -1;
   }
 }
 
@@ -31,28 +41,21 @@ export class Input {
       const { mouseX, mouseY } = this.getCursorPosition(this.canvas, event);
 
       if (this.mouse_state.mouse_mode === MouseMode.standby) {
-        const id = this.selectEntity(mouseX, mouseY);
+        const id = this.attemptEntitySelection(mouseX, mouseY);
 
         if (id != null) {
-          const currentBall = getEntity(id) as Entity;
-          currentBall.color = '#DD725B';
-          this.mouse_state.mouse_mode = MouseMode.selectedEntity;
-          this.mouse_state.selectedBallId = id;
-
+          const currentEntity = getEntity(id) as Entity;
+          currentEntity.select_effect();
+          this.mouse_state.mouse_state_entity_selected(id);
         }
       } else if (this.mouse_state.mouse_mode === MouseMode.selectedEntity) {
-        const currentBall = getEntity(
-          this.mouse_state.selectedBallId,
+        const currentEntity = getEntity(
+          this.mouse_state.selectedEntityId,
         ) as Entity;
-        currentBall.moveDestination.x = mouseX;
-        currentBall.moveDestination.y = mouseY;
-        currentBall.mode = MovementMode.walk;
-        this.mouse_state.mouse_mode = MouseMode.standby;
-        this.mouse_state.selectedBallId = -1;
-        currentBall.color = '#000000';
-        
-        currentBall.walkAudio.loop = true;
-        currentBall.walkAudio.play();
+
+        currentEntity.setNewMoveOrder(mouseX, mouseY);
+        currentEntity.unselect_effect();
+        this.mouse_state.mouse_state_entity_unselected();
       }
     });
   }
@@ -64,7 +67,7 @@ export class Input {
     return { mouseX: x, mouseY: y };
   }
 
-  private selectEntity = (mouseX, mouseY) => {
+  private attemptEntitySelection = (mouseX, mouseY) => {
     for (let i = 0; i < ENTITIES_LIST.length; i++) {
       const ball = ENTITIES_LIST[i];
       const a = { x: mouseX, y: mouseY };
