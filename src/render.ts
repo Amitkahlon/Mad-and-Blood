@@ -29,7 +29,22 @@ export class Render {
 
   private renderGame() {
     this.clearCanvas();
-    this.renderBalls();
+    this.renderEntities();
+    this.renderMouseInput();
+  }
+
+  private renderMouseInput() {
+    if (this.user_input.mouse_state.currentMousePos && this.user_input.mouse_state.mouseHoldFlag) {
+      const currentPos = this.user_input.mouse_state.currentMousePos;
+      const initialPos = this.user_input.mouse_state.initialHoldPos;
+
+      this.ctx.beginPath();
+      this.ctx.fillStyle = "rgba(255, 255, 255, 0.5)";
+      this.ctx.fillRect(currentPos.x, currentPos.y, initialPos.x - currentPos.x, initialPos.y - currentPos.y);
+      //legacy
+      // this.drawEntity(currentPos.x, currentPos.y, 2, 'green');
+      // this.drawEntity(initialPos.x, initialPos.y, 2, 'green');
+    }
   }
 
   private drawEntity = (x, y, r, color) => {
@@ -41,7 +56,7 @@ export class Render {
     this.ctx.fill();
   };
 
-  private renderBalls = () => {
+  private renderEntities = () => {
     ENTITIES_LIST.forEach((entity) => {
       this.drawEntity(entity.pos.x, entity.pos.y, entity.r, entity.color);
     });

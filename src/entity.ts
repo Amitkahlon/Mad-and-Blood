@@ -76,9 +76,9 @@ export class Entity {
     this.color = this.NORMAL_COLOR;
   }
 
-  setNewMoveOrder(x: number, y: number) {
-    this.moveDestination.x = x;
-    this.moveDestination.y = y;
+  setNewMoveOrder(orderPos: Point) {
+    this.moveDestination.x = orderPos.x;
+    this.moveDestination.y = orderPos.y;
     this.mode = MovementMode.walk;
     this.audio.WalkOnGrass.playInLoop();
   }

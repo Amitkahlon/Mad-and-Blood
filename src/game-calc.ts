@@ -7,3 +7,4 @@ export const entityReached = (entity: Entity) => {
   const reached = checkInsideCircle(wantedPos, currentPos, entity.r)
   return reached
 }
+
